@@ -21,14 +21,33 @@ var addBookOnPage = function(bookData){
     var book = $("<div class='book' data-id='" + bookData.id + "'>" +
     "<h2>" + bookData.name + "</h2>" +
     "<p>" + bookData.autor + "</p>" +
-    "<p>" + bookData.description + "</p>" + "<button>Remove</button>" + "</div>");
+    "<p>" + bookData.description + "</p>" + "<button id='one'>Remove</button>" + "<button id='two'>Reviews</button>" + "</div>");
     book.children().not("h2").hide();
 
     book.children("h2").click(function(event){
         $(this).siblings().not("h2").toggle();
     });
+//getting reviews
+    book.children("button#two").click(function(event){
+        console.log("Im getting reviews");
+        $.ajax({
+            url: "http://api.coderslab.pl/book/" + $(this).parent().data().id + "/review",
+            type: "GET",
+            dataType: "json",
+            success: function(json){
+                console.log("udalo sie 2222");
+                console.log(json);
+                json.forEach(function(element, index, array){
+                        console.log(element);
+                        });
+            },
+            error: function(xhr, status, errorThrown) {
+                console.log("nie udalo sie 2222");
+            }
+        });
+    });
 
-    book.children("button").click(function(event){
+    book.children("button#one").click(function(event){
         console.log("Remove book of id " + $(this).parent().data().id);
         $.ajax({
             url: "http://api.coderslab.pl/book/" + $(this).parent().data().id,
@@ -47,8 +66,16 @@ var addBookOnPage = function(bookData){
     $("#allBooks").append(book);
 };
 
+//var requestReviews = function(bookData){
+//url: "http://api.coderslab.pl/book/ + $(this).parent().data().id + "/review/"
+//
+//
+//}
+
 
 $(document).ready(function(){
+
+    loadAllBooks();
 
 
     $("#newBookForm").on("submit", function(){
