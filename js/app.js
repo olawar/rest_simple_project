@@ -48,14 +48,33 @@ var addBookOnPage = function(bookData){
 };
 
 
-
-
-
-
 $(document).ready(function(){
 
-    loadAllBooks();
 
+    $("#newBookForm").on("submit", function(){
+        data = {};
+        data.name = $("#nameInput").val();
+        data.autor = $("#autorInput").val();
+        data.description = $("#descriptionInput").val();
+        console.log(JSON.stringify(data));
+
+            $.ajax({
+                url: "http://api.coderslab.pl/book",
+                type: "POST",
+                dataType: "json",
+                data: JSON.stringify(data),
+                success: function(json){
+                    console.log("Udalo sie");
+                    loadAllBooks();
+                },
+                error: function(xhr, status, errorThrown){
+                    console.log("Nie udalo sie");
+                },
+                complete: function(xhr, status){
+                }
+            });
+            return false;
+    });
 
 
 
