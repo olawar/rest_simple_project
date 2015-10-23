@@ -38,7 +38,9 @@ var addBookOnPage = function(bookData){
                 console.log("udalo sie 2222");
                 console.log(json);
                 json.forEach(function(element, index, array){
-                        console.log(element);
+                    console.log(element);
+                    var revInfo = $("<div class='rev' data-id='" + element.id + "'>" + "<p>" + element.review + "</p>" + "<p>" + element.rating + "</p>" + "</div>");
+                    revInfo.appendTo(book);
                         });
             },
             error: function(xhr, status, errorThrown) {
