@@ -4,18 +4,58 @@ var loadAllBooks = function(){
         type: "GET",
         dataType: "json",
         success: function(json){
+            $("#allBooks").empty();
             console.log("udalo sie");
+            json.forEach(function(element, index, array){
+                addBookOnPage(element);
+            });
         },
         error: function(xhr, status, errorThrown) {
-            console.log("udalo sie");
+            console.log("nie udalo sie");
         }
     });
 };
+
+var addBookOnPage = function(bookData){
+    console.log(bookData);
+    var book = $("<div class='book' data-id='" + bookData.id + "'>" +
+    "<h2>" + bookData.name + "</h2>" +
+    "<p>" + bookData.autor + "</p>" +
+    "<p>" + bookData.description + "</p>" + "<button>Remove</button>" + "</div>");
+    book.children().not("h2").hide();
+
+    book.children("h2").click(function(event){
+        $(this).siblings().not("h2").toggle();
+    });
+
+    book.children("button").click(function(event){
+        console.log("Remove book of id " + $(this).parent().data().id);
+        $.ajax({
+            url: "http://api.coderslab.pl/book/" + $(this).parent().data().id,
+            type: "DELETE",
+            dataType: "json",
+            success: function(json){
+                console.log("udalo sie");
+                loadAllBooks();
+            },
+            error: function(xhr, status, errorThrown){
+                console.log("nie udalo sie");
+            }
+        });
+    });
+
+    $("#allBooks").append(book);
+};
+
+
+
+
 
 
 $(document).ready(function(){
 
     loadAllBooks();
+
 
 
 
